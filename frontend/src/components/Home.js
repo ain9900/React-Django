@@ -7,6 +7,7 @@ import {Edit as EditIcon, Delete as DeleteIcon} from '@mui/icons-material'
 import {Link} from 'react-router-dom'
 
 const Home = () => {
+
   const [myData, setMyData] = useState([]); // Initialize with an empty array
   const [loading , setLoading] = useState(true)
   const GetData = () => {
@@ -30,6 +31,11 @@ const Home = () => {
       {
         accessorKey: 'name', // Access nested data with dot notation
         header: 'Project Name',
+        size: 150,
+      },
+      {
+        accessorKey: 'project_manager', // Access nested data with dot notation
+        header: 'Project Manager',
         size: 150,
       },
       {

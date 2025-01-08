@@ -1,4 +1,4 @@
-import React from 'react'
+import {React, useEffect, useState} from 'react'
 import {Box, Button, Typography} from '@mui/material'
 import MyDatePicker from './forms/MyDatePicker'
 import MyTextField from './forms/MyTextField'
@@ -13,6 +13,31 @@ import {useNavigate} from 'react-router-dom'
 
 const Create = () => {
 
+  const [projectmanager, setProjectManager] = useState([]); // Initialize with an empty array
+  const [loading , setLoading] = useState(true)
+
+  const hardcoded_options = [
+    {id:'', name:'None'},
+    {id:'open', name:'Open'},
+    {id:'In Progress', name:'In Progress'},
+    {id:'Completed', name:'Completed'},
+  ]
+
+  const GetData = () => {
+    AxiosInstance.get('projectmanager/')
+      .then((res) => {
+        setProjectManager(res.data); // Set data from API
+        console.log(res.data); // Log fetched data
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
+
+  useEffect(() => {
+    GetData(); // Fetch data on component mount
+  }, []); // Add dependency array to prevent infinite re-renders
   
 
   const navigate = useNavigate()
@@ -54,6 +79,8 @@ const Create = () => {
 
   return (
     <div>
+
+{loading ? <p>Fetching Data</p>:
     <form onSubmit={handleSubmit(submission)}>
 
       <Box sx={{display:'flex', width:'100%', backgroundColor:'#00003f', marginBottom:'10px'}} >
@@ -98,22 +125,32 @@ const Create = () => {
                   width="30%"
                 />
                 <MySelectField
+                  label="Project Manager"
+                  name="project_manager"
+                  control ={control}
+                  width="30%"
+                  options = {projectmanager}
+                />
+
+                  <MySelectField
                   label="Status"
                   name="status"
                   control ={control}
                   width="30%"
-                />
-                <Box sx={{width:'30%'}}>
+                  options = {hardcoded_options}
 
-                  <Button variant='contained' type='submit' sx={{width:'100%'}}>
+                  />                
+            </Box>
+
+            <Box sx={{display:'flex', paddingTop:'40px' , justifyContent:'start' }}>
+                  <Button variant='contained' type='submit' sx={{width:'30%'}}>
                     Submit
                   </Button>
-                </Box>
-
             </Box>
        
       </Box>
       </form>
+}
     </div>
   )
 }

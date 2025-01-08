@@ -7,7 +7,8 @@ import {Controller} from 'react-hook-form';
 import FormHelperText from '@mui/material/FormHelperText';
 
 export default function MySelectField(props) {
-  const {label, name, control, width, onChange, value} = props
+
+  const {label, name, control, width, options=[]} = props
   const [age, setAge] = React.useState('');
 
   const handleChange = (event) => {
@@ -35,12 +36,13 @@ export default function MySelectField(props) {
           onChange={onChange}   
           error = {!!error}                 
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={"open"}>Open</MenuItem>
-            <MenuItem value={"In Progress"}>In Progress</MenuItem>
-            <MenuItem value={"Completed"}>Completed</MenuItem>
+          {
+            options.map((option)=>(
+              <MenuItem value={option.id}> {option.name} </MenuItem>
+            ))
+          }
+            
+           
         </Select>
         <FormHelperText>{error?.message}</FormHelperText>
 
