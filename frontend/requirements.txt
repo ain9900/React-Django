@@ -1,0 +1,1 @@
+npm install @date-io/dayjs @emotion/react @emotion/styled @hookform/resolvers @mui/icons-material @mui/material @mui/styled-engine-sc @mui/x-date-pickers axios cra-template dayjs material-react-table react react-dom react-hook-form react-router-dom react-scripts styled-components vite web-vitals webpack yup
