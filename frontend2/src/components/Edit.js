@@ -13,11 +13,25 @@ const Edit = () => {
 
   const MyParam = useParams()
   const MyId = MyParam.id
- 
 
-  
+  const [projectmanager, setProjectManager] = useState([]); // Initialize with an empty array
+  const [loading , setLoading] = useState(true)
+
+  const hardcoded_options = [
+    {id:'', name:'None'},
+    {id:'open', name:'Open'},
+    {id:'In Progress', name:'In Progress'},
+    {id:'Completed', name:'Completed'},
+  ]
+
   const GetData = () => {
-    AxiosInstance.get(`project/${MyId}`)
+    AxiosInstance.get('projectmanager/')
+      .then((res) => {
+        setProjectManager(res.data); // Set data from API
+        console.log(res.data); // Log fetched data
+        
+      })
+      AxiosInstance.get(`project/${MyId}`)
       .then((res) => {
         console.log(res.data); // Log fetched data
         setValue('name', res.data.name)
@@ -25,14 +39,10 @@ const Edit = () => {
         setValue('end_date', dayjs(res.data.end_date))
         setValue('comments', res.data.comments)
         setValue('status', res.data.status)
-        
-        
-        
+        setValue('projectmanager', res.data.projectmanager)
+        setLoading(false)
       })
-      .catch((error) =>{
-        console.error('Error fetching data:', error);
-      });
-  };
+    }  
 
   useEffect(() => {
     GetData(); // Fetch data on component mount
@@ -59,12 +69,13 @@ const Edit = () => {
       AxiosInstance.put(`project/${MyId}/`,{
         name:data.name,
         status:data.status,
+        projectmanager:data.projectmanager,
         comments:data.comments,
         start_date: StartDate,
         end_date: EndDate,
       })
       .then((res) =>{
-        alert('Project created successfully!');
+        alert('Project Edited successfully!');
         navigate(`/`)
       })
       .catch((error) => {
@@ -75,11 +86,12 @@ const Edit = () => {
 
   return (
     <div>
+    {loading ? <p>Fetching Data</p>:
     <form onSubmit={handleSubmit(submission)}>
 
       <Box sx={{display:'flex', width:'100%', backgroundColor:'#00003f', marginBottom:'10px'}} >
         <Typography sx={{marginLeft:'20px', color:'#fff'}}>
-          Create Record
+          Edit Record
         </Typography>
       </Box>
 
@@ -123,18 +135,26 @@ const Edit = () => {
                   name="status"
                   control ={control}
                   width="30%"
+                  options = {hardcoded_options}
                 />
-                <Box sx={{width:'30%'}}>
-
-                  <Button variant='contained' type='submit' sx={{width:'100%'}}>
-                    Submit
-                  </Button>
-                </Box>
+                <MySelectField
+                  label="Project Manager"
+                  name="projectmanager"
+                  control ={control}
+                  width="30%"
+                  options = {projectmanager}
+                />
+                
 
             </Box>
-       
+            <Box sx={{width:'30%', marginTop:'40px'}}>
+              <Button variant='contained' type='submit' sx={{width:'100%'}}>
+                Submit
+              </Button>
+            </Box>
       </Box>
       </form>
+    }
     </div>
   )
 }

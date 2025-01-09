@@ -71,6 +71,7 @@ const Create = () => {
         comments:data.comments,
         start_date: StartDate,
         end_date: EndDate,
+        projectmanager : data.projectmanager
       }).then(() =>{        
         navigate(`/`)
       })
