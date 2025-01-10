@@ -6,7 +6,7 @@ router = DefaultRouter()
 
 router.register('project', ProjectViewSet, basename='project')
 router.register('projectmanager', ProjectManagerViewSet, basename='projectmanager')
-
+router.register('projectemployee', ProjectEmployeeViewSet, basename='projectemployee')
 
 
 urlpatterns = router.urls

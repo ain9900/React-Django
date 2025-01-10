@@ -4,7 +4,7 @@ from .models import *
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('id', 'name', 'projectmanager', 'start_date', 'end_date', 'comments', 'status')
+        fields = ('id', 'name', 'projectmanager','employees', 'start_date', 'end_date', 'comments', 'status')
 
 
 class ProjectManagerSerializer(serializers.ModelSerializer):
@@ -13,4 +13,7 @@ class ProjectManagerSerializer(serializers.ModelSerializer):
         fields = ('name', 'id')
     
 
-    
+class ProjectEmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employees
+        fields = ('name', 'id')  

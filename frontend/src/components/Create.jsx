@@ -3,6 +3,7 @@ import {Box, Button, Typography} from '@mui/material'
 import MyDatePicker from './forms/MyDatePicker'
 import MyTextField from './forms/MyTextField'
 import MyMultilineField from './forms/MyMultilineField'
+import MyMultiSelectField from './forms/MyMultiSelectField'
 import MySelectField from './forms/MySelectField'
 import {useForm} from 'react-hook-form'
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -12,6 +13,8 @@ import dayjs from 'dayjs'
 import {useNavigate} from 'react-router-dom'
 
 const Create = () => {
+
+  const [projectemployee, setProjectEmployee] = useState([]); 
 
   const [projectmanager, setProjectManager] = useState([]); // Initialize with an empty array
   const [loading , setLoading] = useState(true)
@@ -28,6 +31,16 @@ const Create = () => {
       .then((res) => {
         setProjectManager(res.data); // Set data from API
         console.log(res.data); // Log fetched data
+        
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+    
+      AxiosInstance.get('projectemployee/')
+      .then((res) => {
+        setProjectEmployee(res.data); // Set data from API
+        console.log(res.data); // Log fetched data
         setLoading(false)
       })
       .catch((error) => {
@@ -40,6 +53,9 @@ const Create = () => {
   }, []); // Add dependency array to prevent infinite re-renders
   
 
+
+
+  
   const navigate = useNavigate()
   const defaultValues = {
     name:'',
@@ -52,6 +68,7 @@ const Create = () => {
   .object({
     name: yup.string().required('Name is a required Field.'),
     status: yup.string().required('Status is a required Field.'),
+    projectemployee: yup.string().required('Employee is a required Field.'),
     comments: yup.string(),
     start_date: yup.date().required('Date is a required Field.'),
     end_date: yup.date().required('Date is a required Field.').min(yup.ref('start_date'),'The End date can not be Before start Date'),    
@@ -69,6 +86,7 @@ const Create = () => {
         name:data.name,
         status:data.status,
         comments:data.comments,
+        employee:data.projectemployee,
         start_date: StartDate,
         end_date: EndDate,
         projectmanager : data.projectmanager
@@ -116,7 +134,7 @@ const Create = () => {
 
             </Box>
 
-            <Box sx={{display:'flex', justifyContent:'space-around' }}>
+            <Box sx={{display:'flex', justifyContent:'space-around', marginBottom:'40px'}}>
 
                 <MyMultilineField
                   label="Comments"
@@ -142,11 +160,22 @@ const Create = () => {
 
                   />                
             </Box>
+            <Box sx={{display:'flex', justifyContent:'start', marginBottom:'40px'}}>
+              <MyMultiSelectField
+                label="Project Employee"
+                  name="projectemployee"
+                  control ={control}
+                  width="30%"
+                  options = {projectemployee}
+              />
+            
 
-            <Box sx={{display:'flex', paddingTop:'40px' , justifyContent:'start' }}>
-                  <Button variant='contained' type='submit' sx={{width:'30%'}}>
-                    Submit
-                  </Button>
+            
+            </Box>
+            <Box sx={{display:'flex', justifyContent:'END' }}>
+            <Button variant='contained' type='submit' sx={{width:'30%'}}>
+              Submit
+            </Button>
             </Box>
        
       </Box>
